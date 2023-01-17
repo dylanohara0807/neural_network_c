@@ -50,3 +50,12 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Personalized gitignore
+chess_nn
+nn_specific
+training_data
+weight_data
+template.txt
+main_nn
+.DS_Store
