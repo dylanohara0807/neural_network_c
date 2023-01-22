@@ -24,14 +24,16 @@ struct neural_network_model {
 
 struct Grad_S {
 
-    NModel tb;
-    double **reals;
-    double **inputs;
-    int length;
-    int ninputs;
-    double ***delta;
+    NModel tb;    ///< model to update
+    double **reals;    ///< target values
+    double **inputs;    ///< input values
+    int length;    ///< number of examples
+    int ninputs;    ///< number of inputs
+    double ***delta;    ///< accumulated gradients
 
 }; typedef struct Grad_S *GS;
+
+///
 
 NModel nmodel_new(int size, int ninput) {
 
@@ -43,13 +45,17 @@ NModel nmodel_new(int size, int ninput) {
 
 }
 
-void nmodel_insert(NModel tb, int size, int end) {
+///
+
+void nmodel_insert(NModel tb, int size) {
 
     tb->layer_list = realloc(tb->layer_list, (tb->size + 1) * 8);
     tb->layer_list[tb->size] = nlayer_new(size, nlayer_size(tb->layer_list[tb->size - 1]) + 1);
     tb->size += 1;
 
 }
+
+///
 
 double ** nmodel_fp(NModel tb, double inputs[]) {
 
@@ -62,10 +68,17 @@ double ** nmodel_fp(NModel tb, double inputs[]) {
 
 }
 
-// Counter for location in training input
+// Counter for input location in multi-threaded training
 static int data_loc = 0;
 /// Thread for locking/unlocking
 static pthread_mutex_t muthread = PTHREAD_MUTEX_INITIALIZER;
+
+/// @brief Performs gradient descent using multiple threads. Utilizes struct
+/// to pass information to function, including the NModel, length of examples
+/// inputs, real outputs, and number of inputs. Performs full batch gradient descent.
+///
+/// @param arg (*void) *Grad_S, struct containing information for gradient descent
+/// @return NULL, when finished
 
 static void * thread_gradient(void *arg) {
 
@@ -126,6 +139,8 @@ static void * thread_gradient(void *arg) {
 
 }
 
+///
+
 void nmodel_bp(NModel tb, double **reals, double **inputs, int length, int ninputs) {
 
     static int times = 0;
@@ -185,6 +200,8 @@ void nmodel_bp(NModel tb, double **reals, double **inputs, int length, int ninpu
     // end
 }
 
+///
+
 double nmodel_costfunc(NModel tb, double **reals, double **inputs, double length) {
     static int rep = 0;
 
@@ -220,6 +237,8 @@ double nmodel_costfunc(NModel tb, double **reals, double **inputs, double length
 
 }
 
+///
+
 void nmodel_predict(NModel tb, double inputs[]) {
 
     double **act = nmodel_fp(tb, inputs);
@@ -233,6 +252,8 @@ void nmodel_predict(NModel tb, double inputs[]) {
 
 }
 
+///
+
 void nmodel_delete(NModel tb) {
 
     for (int i = 0; i < tb->size; i++) nlayer_delete(tb->layer_list[i]);
@@ -240,6 +261,8 @@ void nmodel_delete(NModel tb) {
     free(tb);
 
 }
+
+///
 
 void nmodel_fileprint(NModel tb, char* filename, int ninputs, double cfunc) {
 
@@ -260,6 +283,8 @@ void nmodel_fileprint(NModel tb, char* filename, int ninputs, double cfunc) {
     fclose(fp);
 
 }
+
+///
 
 void nmodel_print(NModel tb) {
 

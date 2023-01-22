@@ -21,6 +21,8 @@ struct neural_network_layer {
 
 #include "nn_layer.h"
 
+///
+
 NLayer nlayer_new(int size_curr, int size_prev) {
 
     NLayer temp = malloc(sizeof(struct neural_network_layer));
@@ -30,6 +32,8 @@ NLayer nlayer_new(int size_curr, int size_prev) {
     return temp;
 
 }
+
+///
 
 double * nlayer_fp(NLayer tb, double inputs[], int end) {
 
@@ -62,6 +66,8 @@ double * nlayer_fp(NLayer tb, double inputs[], int end) {
 
 }
 
+///
+
 double * nlayer_bp(NLayer tb, double errors[], int prev_size) {
 
     double *sum = malloc(8 * prev_size);
@@ -77,6 +83,8 @@ double * nlayer_bp(NLayer tb, double errors[], int prev_size) {
 
 }
 
+///
+
 double nlayer_costfunc(NLayer tb) {
 
     double ret = 0;
@@ -85,11 +93,15 @@ double nlayer_costfunc(NLayer tb) {
 
 }
 
+///
+
 void nlayer_updatetheta(NLayer tb, double **theta) {
 
     for (int i = 0; i < tb->size; i++) nnode_updatetheta(tb->node_list[i], theta[i]);
 
 }
+
+///
 
 double ** nlayer_nodetheta(NLayer tb, int initd) {
 
@@ -107,6 +119,8 @@ double ** nlayer_nodetheta(NLayer tb, int initd) {
 
 }
 
+///
+
 void nlayer_delete(NLayer tb) {
     
     for (int i = 0; i < tb->size; i++) nnode_delete(tb->node_list[i]);
@@ -115,11 +129,15 @@ void nlayer_delete(NLayer tb) {
 
 }
 
+///
+
 int nlayer_size(NLayer tb) {
 
     return tb->size;
 
 }
+
+///
 
 void nlayer_print(NLayer tb) {
 

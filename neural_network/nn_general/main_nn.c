@@ -92,9 +92,9 @@ int main(int argc, char *argv[]) {
     fclose(fp);
 
     NModel test = nmodel_new(16, 3);
-    nmodel_insert(test, 8, 0);
-    nmodel_insert(test, 8, 0);
-    nmodel_insert(test, 1, 1);
+    nmodel_insert(test, 8);
+    nmodel_insert(test, 8);
+    nmodel_insert(test, 1);
 
     printf("\n");
     printf("Cost Function: %f\n\n", nmodel_costfunc(test, output, input, length));
@@ -151,9 +151,13 @@ int main(int argc, char *argv[]) {
  
     fclose(fp);
 
+    double **act;
     for (int i = 0; i < length; i++) 
-        if (nmodel_fp(test, input[i])[3][0] >= .5) output[i][0] = 1;
+        if (act = nmodel_fp(test, input[i])[3][0] >= .5) output[i][0] = 1;
         else output[i][0] = 0;
+        for (int m = 0; m < 4; m++) 
+            free(act[m]);
+        free(act);
     fp = fopen("../../training_data/titanic_results.csv", "w");
     fprintf(fp, "PassengerId,Survived\n"); int id = 891;
     for (int i = 0; i < length; i++) fprintf(fp, "%d,%d\n", id+=1, (int) output[i][0]);

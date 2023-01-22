@@ -20,7 +20,7 @@ struct neural_network_node {
 
 #include "nn_node.h"
 
-static int r = 0;
+///
 
 NNode nnode_new(int size) {
 
@@ -36,6 +36,8 @@ NNode nnode_new(int size) {
 
 }
 
+///
+
 double nnode_fp(NNode tb, double inputs[]) {
 
     double sum = 0;
@@ -45,6 +47,8 @@ double nnode_fp(NNode tb, double inputs[]) {
 
 }
 
+///
+
 double nnode_costfunc(NNode tb) {
 
     double ret = 0;
@@ -53,17 +57,23 @@ double nnode_costfunc(NNode tb) {
 
 }
 
+///
+
 void nnode_updatetheta(NNode tb, double *theta) {
 
     for (int i = 0; i < tb->size; i++) tb->theta[i] -= theta[i];
 
 }
 
+///
+
 double nnode_theta(NNode tb, int pos) {
 
     return tb->theta[pos];
 
 }
+
+///
 
 void nnode_delete(NNode tb) {
     
@@ -72,11 +82,15 @@ void nnode_delete(NNode tb) {
 
 }
 
+///
+
 int nnode_size(NNode tb) {
 
     return tb->size;
 
 }
+
+///
 
 void nnode_print(NNode tb) {
 
